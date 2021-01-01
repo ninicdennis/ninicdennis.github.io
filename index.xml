@@ -49,5 +49,14 @@ As a tl;dr, here is a simple rundown:</description>
 Today, I wanted to talk about a future plan I have going on right now. Recently, I had found a Dell R640 for VERY cheap, but my main issue is where the server rack is located, I can not have it running at certain times, as it is very very loud. I am currently in the process of moving this specific server to a place where noise wouldn&amp;rsquo;t be an issue.</description>
     </item>
     
+    <item>
+      <title>Resume</title>
+      <link>/resume/</link>
+      <pubDate>Thu, 31 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/resume/</guid>
+      <description>Skills  2+ Years developing with Javascript, React, HTML5, CSS3, PostgreSQL and Node. 1+ Years developing with React Native, Express, Django, Firebase, AWS, Wordpress. Proficiency in developing under Linux, Windows, and Mac, preferring linux and terminal commands. Published 1 web application and 1 phone application to the web/android/IOS stores respectively. Excels with Git, Docker, Postman, Next.JS, Python, and building documentation. Skills in building custom javascript scrapers and bots.  Work Experience React Lead Developer Bright Bridge Web | December 2020 - Present</description>
+    </item>
+    
   </channel>
 </rss>
