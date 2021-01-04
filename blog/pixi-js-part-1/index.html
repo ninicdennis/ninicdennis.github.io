@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Full stack web and app developer personal site and blog.">
+    <meta name="Author" content="Dennis Ninic">
+    <meta name="keywords" content="developer">
+    <link rel="stylesheet" href=/css/syntax.css>
+    <link rel="stylesheet" href=/css/style.css>
+    <script src="https://kit.fontawesome.com/1b7478c139.js" crossorigin="anonymous"></script>
+    <title>Doggobot</title>
+  </head><body><aside id="sidenav">
+    <header>
+    
+        <a href=/><img src="/avatar.png" alt="avatar"></a>
+        
+    
+
+    <a id="branding" href=/>
+        
+            Doggobot
+        
+    </a>
+    </header>
+
+    <nav>
+        
+            		
+            <a href="/"
+                
+            >
+                <i class="fas fa-home fa-sm"></i>
+                <span>home</span>
+            </a>
+        
+            		
+            <a href="/blog/"
+                
+            >
+                <i class="fas fa-keyboard fa-ms"></i>
+                <span>blog</span>
+            </a>
+        
+            		
+            <a href="https://github.com/ninicdennis"
+                
+                    target="_blank"
+                
+            >
+                <i class="fab fa-github fa-ms"></i>
+                <span>github</span>
+            </a>
+        
+            		
+            <a href="/about"
+                
+            >
+                <i class="far fa-user"></i>
+                <span>about</span>
+            </a>
+        
+            		
+            <a href="/contact"
+                
+            >
+                <i class="far fa-envelope"></i>
+                <span>contact</span>
+            </a>
+        
+            		
+            <a href="/resume"
+                
+            >
+                <i class="far fa-user"></i>
+                <span>resume</span>
+            </a>
+        
+    </nav>
+</aside>
+<main id="main">
+            <a href="javascript:void(0)" id="closebtn" onclick="navToggle()"><i class="fas fa-bars fa-lg"></i></a>
+            <div class="content">
+    
+    <h1 id="title">React Pixi.js Development Part 1</h1>
+    
+      
+    <nav id="TableOfContents"></nav>
+    <p>Afternoon,</p>
+<p>For the past few months, I have been wanting to get into game development for quite some time. It was one of my passions as a kid, but I never thought I could do it until now. As stated earlier, I am a web developer, with a little over 1 year of developer experience. Every time I have tried, I got a little frustrated due to very high inconsistencies with an entire game engine framework vs. something like react. Having to use their very unfamiliar code editor, as well as a fairly unconventional scripting methods, I was starting to lose interest pretty quickly. That is when I came across a little game called <a href="https://www.mysteralegacy.com/">Mysteria</a>. An open world sandbox MMORPG completely built in javascript, front to back. My initial thoughts was &ldquo;How on earth can someone achieve this?&rdquo; Well, after a brief conversation with the team over at Mysteria, I had found a solution, which was called pixiJS. <a href="https://www.pixijs.com">PixiJS</a> is a 2D WebGL renderer, and claims it is one of the fastest out there. I was a little hesitant at first, but I then found a port to react called <a href="https://github.com/michalochman/react-pixi-fiber">react-pixi-fiber</a>, which uses Reacts declaritive style, and Immediately went to work trying to figure this out.</p>
+<p>First thing is first, I have to develop a sprite. This is very easily done by just calling a &lt; Sprite &gt; tag. All was going well, but then when it came down to movement, I had a bit of a struggle. I could not find out a good way with react hooks to create a lag-free consistent movement.</p>
+<p><img src="../../images/spriteImage.PNG" alt="Background"></p>
+<p>Here you can see the react logo drawn on a canvas.</p>
+<p>After a days worth frustration with the entire project, I thought maybe hooks was not the way to go about things, as it is very asynchronous. I also needed to store the players X and Y position later down the line to create a sort of collision system with other walls. It was then I decided to use <a href="https://atlassian.github.io/react-sweet-state/#/">react-sweet-state</a>, which is a combination of things I like about Redux and React Context, but in a much nicer package. (I could go more into react-sweet-state and why I dislike using Redux and Context API, but we can keep that for a later date!) After a quick implementation, I had a working demo of the sprite being able to move in 8 directions accordingly, using WASD. What is also nice is that hot reload will save the position, and changes will be reflected on screen, making development much nicer. The code shown below is quite ugly, but I more wanted to create a proof of concept just to get an idea of what was going down without making it as pretty as possible. This could definitely cleaned up.</p>
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"> <span class="nx">movement</span><span class="o">:</span> <span class="p">(</span><span class="nx">dir</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">({</span><span class="nx">setState</span><span class="p">,</span> <span class="nx">getState</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="p">{</span>
+     <span class="c1">// Keep this snippet in mind later! Very important!
+</span><span class="c1"></span>        <span class="kr">const</span> <span class="nx">collisionCheck</span> <span class="o">=</span> <span class="p">(</span><span class="nx">player</span><span class="p">,</span> <span class="nx">obj</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">player</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">player</span><span class="p">.</span><span class="nx">width</span> <span class="o">&gt;</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">x</span> <span class="o">&amp;&amp;</span> <span class="nx">player</span><span class="p">.</span><span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">width</span> <span class="o">&amp;&amp;</span> <span class="nx">player</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="nx">player</span><span class="p">.</span><span class="nx">height</span> <span class="o">&gt;</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">y</span> <span class="o">&amp;&amp;</span> <span class="nx">player</span><span class="p">.</span><span class="nx">y</span> <span class="o">&lt;</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">height</span><span class="p">;</span>
+            <span class="p">}</span>
+                <span class="nx">getState</span><span class="p">().</span><span class="nx">levelData</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">obj</span> <span class="p">=&gt;</span> <span class="p">{</span>
+                    <span class="k">if</span><span class="p">(</span><span class="nx">collisionCheck</span><span class="p">(</span><span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">,</span> <span class="nx">obj</span><span class="p">))</span> <span class="p">{</span>
+                        
+                    <span class="p">}</span>
+                <span class="p">})</span>
+      <span class="k">switch</span><span class="p">(</span><span class="nx">dir</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="s1">&#39;wa&#39;</span><span class="o">:</span>
+          <span class="nx">setState</span><span class="p">({</span>
+            <span class="nx">player</span><span class="o">:</span> <span class="p">{</span>
+                    <span class="p">...</span><span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">,</span>
+                <span class="nx">x</span><span class="o">:</span> <span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">.</span><span class="nx">x</span> <span class="o">-</span> <span class="mi">4</span><span class="p">,</span>
+                <span class="nx">y</span><span class="o">:</span> <span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">.</span><span class="nx">y</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="p">}</span>
+            <span class="p">})</span>
+          <span class="k">break</span>
+        <span class="k">case</span> <span class="s1">&#39;wd&#39;</span><span class="o">:</span>
+          <span class="nx">setState</span><span class="p">({</span>
+            <span class="nx">player</span><span class="o">:</span> <span class="p">{</span>
+                <span class="p">...</span><span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">,</span>
+              <span class="nx">x</span><span class="o">:</span> <span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="mi">4</span><span class="p">,</span>
+              <span class="nx">y</span><span class="o">:</span> <span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="p">}</span>
+          <span class="p">})</span>
+          <span class="k">break</span>
+        <span class="k">case</span> <span class="s1">&#39;sa&#39;</span><span class="o">:</span>
+          <span class="nx">setState</span><span class="p">({</span>
+            <span class="nx">player</span><span class="o">:</span> <span class="p">{</span>
+                <span class="p">...</span><span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">,</span>
+              <span class="nx">x</span><span class="o">:</span> <span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">.</span><span class="nx">x</span> <span class="o">-</span> <span class="mi">4</span><span class="p">,</span>
+              <span class="nx">y</span><span class="o">:</span> <span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="p">}</span>
+          <span class="p">})</span>
+          <span class="k">break</span>
+        <span class="k">case</span> <span class="s1">&#39;sd&#39;</span><span class="o">:</span>
+          <span class="nx">setState</span><span class="p">({</span>
+            <span class="nx">player</span><span class="o">:</span> <span class="p">{</span>
+                <span class="p">...</span><span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">,</span>
+              <span class="nx">x</span><span class="o">:</span> <span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="mi">4</span><span class="p">,</span>
+              <span class="nx">y</span><span class="o">:</span> <span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">.</span><span class="nx">y</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="p">}</span>
+          <span class="p">})</span>
+          <span class="k">break</span>
+        <span class="k">case</span> <span class="s1">&#39;w&#39;</span><span class="o">:</span>
+            <span class="nx">setState</span><span class="p">({</span>
+            <span class="nx">player</span><span class="o">:</span> <span class="p">{</span>
+                <span class="p">...</span><span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">,</span>
+                <span class="nx">x</span><span class="o">:</span> <span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span>
+                <span class="nx">y</span><span class="o">:</span> <span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">.</span><span class="nx">y</span> <span class="o">-</span> <span class="mi">5</span>
+                <span class="p">}</span>
+            <span class="p">})</span>
+          <span class="k">break</span>
+        <span class="k">case</span> <span class="s1">&#39;s&#39;</span><span class="o">:</span>
+          <span class="nx">setState</span><span class="p">({</span>
+          <span class="nx">player</span><span class="o">:</span> <span class="p">{</span>
+                <span class="p">...</span><span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">,</span>
+                <span class="nx">x</span><span class="o">:</span> <span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span>
+                <span class="nx">y</span><span class="o">:</span> <span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="mi">5</span>
+          <span class="p">}</span>
+          <span class="p">})</span>
+          <span class="k">break</span>
+        <span class="k">case</span> <span class="s1">&#39;a&#39;</span><span class="o">:</span>
+        <span class="nx">setState</span><span class="p">({</span>
+          <span class="nx">player</span><span class="o">:</span> <span class="p">{</span>
+                <span class="p">...</span><span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">,</span>
+                <span class="nx">x</span><span class="o">:</span> <span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">.</span><span class="nx">x</span>  <span class="o">-</span> <span class="mi">5</span><span class="p">,</span>
+                <span class="nx">y</span><span class="o">:</span> <span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">.</span><span class="nx">y</span>
+          <span class="p">}</span>
+          <span class="p">})</span>
+         <span class="k">break</span>
+        <span class="k">case</span> <span class="s1">&#39;d&#39;</span><span class="o">:</span>
+          <span class="nx">setState</span><span class="p">({</span>
+          <span class="nx">player</span><span class="o">:</span> <span class="p">{</span>
+                <span class="p">...</span><span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">,</span>
+                <span class="nx">x</span><span class="o">:</span> <span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">.</span><span class="nx">x</span>  <span class="o">+</span> <span class="mi">5</span><span class="p">,</span>
+                <span class="nx">y</span><span class="o">:</span> <span class="nx">getState</span><span class="p">().</span><span class="nx">player</span><span class="p">.</span><span class="nx">y</span>
+          <span class="p">}</span>
+          <span class="p">})</span>
+          <span class="k">break</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+</code></pre></div><p>With this, Generating a basic player component was quite simple,</p>
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">Player</span> <span class="o">=</span> <span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">keys</span> <span class="o">=</span> <span class="p">{}</span>
+
+  
+    <span class="nx">useEffect</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span> 
+      <span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;keydown&#39;</span><span class="p">,</span> <span class="nx">onKeyPress</span><span class="p">);</span>
+      <span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;keyup&#39;</span><span class="p">,</span> <span class="nx">onKeyDown</span><span class="p">);</span>
+      <span class="k">return</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="nb">document</span><span class="p">.</span><span class="nx">removeEventListener</span><span class="p">(</span><span class="s1">&#39;keydown&#39;</span><span class="p">,</span> <span class="nx">onKeyPress</span><span class="p">);</span>
+        <span class="nb">document</span><span class="p">.</span><span class="nx">removeEventListener</span><span class="p">(</span><span class="s1">&#39;keyup&#39;</span><span class="p">,</span> <span class="nx">onKeyDown</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">},</span> <span class="p">[])</span>
+  
+    <span class="kr">const</span> <span class="nx">onKeyPress</span> <span class="o">=</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+      <span class="nx">keys</span><span class="p">[</span><span class="nx">e</span><span class="p">.</span><span class="nx">keyCode</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
+  
+    <span class="kr">const</span> <span class="nx">onKeyDown</span> <span class="o">=</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+      <span class="nx">keys</span><span class="p">[</span><span class="nx">e</span><span class="p">.</span><span class="nx">keyCode</span><span class="p">]</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kr">const</span> <span class="nx">ticker</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">PIXI</span><span class="p">.</span><span class="nx">Ticker</span><span class="p">();</span> <span class="c1">// Custom frame ticker from PIXI, runs every frame, has deltatime
+</span><span class="c1"></span>    <span class="nx">ticker</span><span class="p">.</span><span class="nx">start</span><span class="p">();</span>
+    <span class="nx">ticker</span><span class="p">.</span><span class="nx">add</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// Note, each key has its own key value, you must check for both keys first, otherwise this will not work.
+</span><span class="c1"></span>      <span class="k">if</span><span class="p">(</span><span class="nx">keys</span><span class="p">[</span><span class="s1">&#39;87&#39;</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="nx">keys</span><span class="p">[</span><span class="s1">&#39;65&#39;</span><span class="p">])</span> <span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">movement</span><span class="p">(</span><span class="s1">&#39;wa&#39;</span><span class="p">)</span>
+      <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">keys</span><span class="p">[</span><span class="s1">&#39;87&#39;</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="nx">keys</span><span class="p">[</span><span class="s1">&#39;68&#39;</span><span class="p">]</span> <span class="p">)</span> <span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">movement</span><span class="p">(</span><span class="s1">&#39;wd&#39;</span><span class="p">)</span>
+      <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">keys</span><span class="p">[</span><span class="s1">&#39;83&#39;</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="nx">keys</span><span class="p">[</span><span class="s1">&#39;65&#39;</span><span class="p">]</span> <span class="p">)</span> <span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">movement</span><span class="p">(</span><span class="s1">&#39;sa&#39;</span><span class="p">)</span>
+      <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">keys</span><span class="p">[</span><span class="s1">&#39;83&#39;</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="nx">keys</span><span class="p">[</span><span class="s1">&#39;68&#39;</span><span class="p">]</span> <span class="p">)</span> <span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">movement</span><span class="p">(</span><span class="s1">&#39;sd&#39;</span><span class="p">)</span>
+
+      <span class="k">if</span><span class="p">(</span><span class="nx">keys</span><span class="p">[</span><span class="s1">&#39;87&#39;</span><span class="p">]</span> <span class="p">)</span> <span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">movement</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">keys</span><span class="p">[</span><span class="s1">&#39;83&#39;</span><span class="p">]</span> <span class="p">)</span> <span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">movement</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">keys</span><span class="p">[</span><span class="s1">&#39;65&#39;</span><span class="p">]</span> <span class="p">)</span> <span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">movement</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">keys</span><span class="p">[</span><span class="s1">&#39;68&#39;</span><span class="p">]</span> <span class="p">)</span>  <span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">movement</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+    <span class="p">})</span>
+  
+    <span class="kr">const</span> <span class="nx">Logo</span> <span class="o">=</span> <span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="o">&lt;</span><span class="nx">Sprite</span> <span class="nx">texture</span> <span class="o">=</span> <span class="p">{</span><span class="nx">PIXI</span><span class="p">.</span><span class="nx">Texture</span><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="nx">logo</span><span class="p">)}</span> <span class="p">{...</span><span class="nx">props</span><span class="p">}</span> <span class="o">/&gt;</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="o">&lt;</span><span class="nx">Logo</span> <span class="nx">x</span> <span class="o">=</span> <span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">x</span><span class="p">}</span> <span class="nx">y</span><span class="o">=</span> <span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">y</span><span class="p">}</span> <span class="nx">height</span> <span class="o">=</span> <span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">height</span><span class="p">}</span> <span class="nx">width</span> <span class="o">=</span> <span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">width</span><span class="p">}</span><span class="o">/&gt;</span>
+<span class="p">}</span>
+
+<span class="kr">export</span> <span class="k">default</span> <span class="nx">Player</span>
+</code></pre></div><p>Keep in mind, this will run every time a keyboard press is happening, and it will still run silky smooth! Impressive!</p>
+<p>Now with that finished, I wanted to create a sort of &ldquo;tilemat&rdquo; system in order to draw a level out in code. I took a very minimal and I believe oldschool method, which was taking an array, and typing out a level based on the size of each sprite. Now, all my sprites were going to be 1/10th of the frame size, which was 800x600, so this was pretty simple to do. Again, I will say this method is VERY unperformant to do, because moving the sprite will regenerate every single tile on frame, as well as save the map data with the code shown below. But, this was more a PoC that It was possible, and pixiJS took it like an absolute champ, not lagging at all with this process, which is very impressive.</p>
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">Map</span> <span class="o">=</span> <span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">useData</span> <span class="o">=</span> <span class="nx">createHook</span><span class="p">(</span><span class="nx">Store</span><span class="p">);</span>
+    <span class="kr">const</span> <span class="p">[</span><span class="nx">state</span><span class="p">,</span> <span class="nx">actions</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useData</span><span class="p">()</span>
+    <span class="c1">// VERY simple square, I could&#39;ve made the words much shorter, but this was a test.
+</span><span class="c1"></span>    <span class="kr">const</span> <span class="nx">level</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span><span class="s1">&#39;wall&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="c1">// I use leveldata here to get the X and Y position of each wall.
+</span><span class="c1"></span>    <span class="kd">let</span> <span class="nx">levelData</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="nx">useEffect</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="nx">actions</span><span class="p">.</span><span class="nx">mapData</span><span class="p">(</span><span class="nx">levelData</span><span class="p">)</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span>
+    <span class="p">},</span> <span class="p">[])</span>
+
+    <span class="kr">const</span> <span class="nx">Wall</span> <span class="o">=</span> <span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="o">&lt;</span><span class="nx">Sprite</span> <span class="nx">texture</span> <span class="o">=</span> <span class="p">{</span><span class="nx">PIXI</span><span class="p">.</span><span class="nx">Texture</span><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="nx">wall</span><span class="p">)}</span> <span class="p">{...</span><span class="nx">props</span><span class="p">}</span> <span class="o">/&gt;</span>
+      <span class="p">}</span>
+      <span class="kd">let</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">0</span>
+      <span class="k">return</span><span class="p">(</span>
+          <span class="o">&lt;</span><span class="nx">Container</span><span class="o">&gt;</span>
+              <span class="p">{</span><span class="nx">level</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">id</span><span class="p">,</span> <span class="nx">x</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+                  <span class="c1">// Moves the Y position of a wall by 60 pixels down, to create the next row.
+</span><span class="c1"></span>                  <span class="k">if</span> <span class="p">(</span><span class="nx">x</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">x</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="nx">y</span><span class="o">+=</span> <span class="mi">60</span>
+                  <span class="k">if</span><span class="p">(</span><span class="nx">id</span> <span class="o">===</span> <span class="s1">&#39;wall&#39;</span><span class="p">)</span> <span class="p">{</span>
+                      <span class="c1">// Just grabbing wall data - note I did this without the check, and it still ran flawlessly! No lag at all
+</span><span class="c1"></span>                    <span class="nx">levelData</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+                        <span class="nx">x</span><span class="o">:</span> <span class="nx">x</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">?</span> <span class="nx">x</span> <span class="o">*</span> <span class="mi">80</span> <span class="o">:</span> <span class="p">(</span><span class="nx">x</span> <span class="o">%</span> <span class="mi">10</span><span class="p">)</span> <span class="o">*</span> <span class="mi">80</span><span class="p">,</span>
+                        <span class="nx">y</span><span class="p">,</span>
+                        <span class="nx">width</span><span class="o">:</span> <span class="mi">80</span><span class="p">,</span>
+                        <span class="nx">height</span><span class="o">:</span> <span class="mi">60</span>
+                    <span class="p">})</span>
+                  <span class="p">}</span>
+                  <span class="k">if</span><span class="p">(</span><span class="nx">id</span> <span class="o">===</span> <span class="s1">&#39;wall&#39;</span><span class="p">)</span> <span class="p">{</span>
+                      <span class="k">return</span> <span class="p">(</span>
+                          <span class="o">&lt;</span><span class="nx">Wall</span> <span class="nx">width</span> <span class="o">=</span> <span class="p">{</span><span class="mi">80</span><span class="p">}</span> <span class="nx">height</span> <span class="o">=</span> <span class="p">{</span><span class="mi">60</span><span class="p">}</span> <span class="nx">x</span> <span class="o">=</span> <span class="p">{</span><span class="nx">x</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">?</span> <span class="nx">x</span> <span class="o">*</span> <span class="mi">80</span> <span class="o">:</span> <span class="p">(</span><span class="nx">x</span> <span class="o">%</span> <span class="mi">10</span><span class="p">)</span> <span class="o">*</span> <span class="mi">80</span><span class="p">}</span> <span class="nx">y</span> <span class="o">=</span> <span class="p">{</span><span class="nx">y</span><span class="p">}</span><span class="o">/&gt;</span> <span class="c1">// Math is hard, this X position modulus took me a minute to get!
+</span><span class="c1"></span>                      <span class="p">)</span>
+                  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                      <span class="k">return</span><span class="p">;</span>
+                  <span class="p">}</span>
+              <span class="p">})}</span>
+            <span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">children</span><span class="p">}</span>
+          <span class="o">&lt;</span><span class="err">/Container&gt;</span>
+      <span class="p">)</span>
+
+<span class="p">}</span>
+
+<span class="kr">export</span> <span class="k">default</span> <span class="nx">Map</span>
+
+</code></pre></div><p>And here is the result! (I added the position there to check some things, drawn outside of the container!)</p>
+<p><img src="../../images/mapdrawn.PNG" alt="Result"></p>
+<p>Now, with the collision system, I had all the parts I needed. I had gotten a piece of code in order to check if the player sprite coordinates were touching the object (in this case, wall) coordinates, it would return either a true or false value. I am currently stuck on how to actually implement this so that once the player sprite hits said wall, it doesn&rsquo;t allow the X and Y coordinate of the player to go inside of that object. I have been working on it all day today, so I thought it was a good time to take a break and write this up. If you guys have any idea on how to solve this, please let me know, the code is in my github repo.</p>
+<p>So far, I am having a great time, this feels so familiar but so new to me, that I am absolutely having a blast, and would highly recommend. The only downside is you really are on your own, as the community is quite small. But a lot of the problems occurring do feel like React problems, so it does make it much more easier to debug!</p>
+<p>Server parts are on their way as they speak! Fans and CPU cooler have just gotten here, everything else has either been shipped or in transit!</p>
+<p>&ndash; Doggobot</p>
+
+    
+    <div class="nav-next-prev">
+        <div class="nav-prev">
+            
+                <a href="/blog/equipment/"><i class="fas fa-chevron-left"></i></a>
+            
+        </div>
+        <a class="nav-top" href="#">top</i></a>
+        <div class="nav-next">
+            
+                <a class="grayed-out" href="javascript:void()"><i class="fas fa-chevron-right"></i></a>
+            
+        </div>
+    </div>
+    
+
+            </div><footer>
+<div class="footer-content">
+
+  <div class="contact-info">
+      
+          <div class="footer-mail">
+          <i class="far fa-envelope"></i> <a href="mailto:ninicdennis@gmail.com">ninicdennis@gmail.com</a> </div>
+      
+      
+  </div>
+
+
+<p class="copyright meta">Copyright © 2008–2019, Steve Francia and the Hugo Authors; all rights reserved.</p>
+
+</div>
+</footer></main>
+    </body>
+    <script src=/js/navbutton.js></script>
+</html>

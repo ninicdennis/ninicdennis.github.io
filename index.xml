@@ -7,7 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright © 2008–2019, Steve Francia and the Hugo Authors; all rights reserved.</copyright>
-    <lastBuildDate>Thu, 31 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 03 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>React Pixi.js Development Part 1</title>
+      <link>/blog/pixi-js-part-1/</link>
+      <pubDate>Sun, 03 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/pixi-js-part-1/</guid>
+      <description>Afternoon,
+For the past few months, I have been wanting to get into game development for quite some time. It was one of my passions as a kid, but I never thought I could do it until now. As stated earlier, I am a web developer, with a little over 1 year of developer experience. Every time I have tried, I got a little frustrated due to very high inconsistencies with an entire game engine framework vs.</description>
+    </item>
+    
     <item>
       <title>About</title>
       <link>/about/</link>
