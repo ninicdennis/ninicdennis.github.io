@@ -7,7 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright © 2008–2019, Steve Francia and the Hugo Authors; all rights reserved.</copyright>
-    <lastBuildDate>Sun, 03 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 04 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Vinyl Setup</title>
+      <link>/blog/vinyl-setup/</link>
+      <pubDate>Mon, 04 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/vinyl-setup/</guid>
+      <description>Afternoon,
+Today, I thought it would be a great idea to share my audio equipment. I happen to love audio equipment quite a bit, and would say that music is a big part of my life. Now, Vinyl is one of the most unconventional way to listen to music, but the whole experience is a great treat, forcing you to listen to the music. I love the whole process and everything about it, and would love to share it.</description>
+    </item>
+    
     <item>
       <title>React Pixi.js Development Part 1</title>
       <link>/blog/pixi-js-part-1/</link>
