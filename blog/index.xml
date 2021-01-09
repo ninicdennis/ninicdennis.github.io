@@ -7,7 +7,18 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright © 2008–2019, Steve Francia and the Hugo Authors; all rights reserved.</copyright>
-    <lastBuildDate>Mon, 04 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 09 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Personal NAS / Plex / E-book server - Part 2</title>
+      <link>/blog/server-build-part-2/</link>
+      <pubDate>Sat, 09 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/server-build-part-2/</guid>
+      <description>Afternoon,
+This is just an update for the server build, a majority of the parts had arrived, so I thought it was a good time to start building. The ram is the last thing missing, as it was shipped from Shenzhen China, so it will take a little bit longer to get here.
+First, I started off with removing the crappy molex fans that were provided, and instead replace them with something much more quiter, some 80MM Noctua redux fans.</description>
+    </item>
+    
     <item>
       <title>Vinyl Setup</title>
       <link>/blog/vinyl-setup/</link>
